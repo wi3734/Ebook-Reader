@@ -15,12 +15,12 @@ class Ebook_runner():
 
 class Book():
     def __init__(self):
-        self.book = open('11-0.txt', encoding='utf-8')
+        self.book = open('', encoding='utf-8') #first arg. for a name of the ebook you are trying to import
         self.pages = Page(self.book)
         self.current_page = 0
 
     def open_page(self):
-        print("Book name: {}, Total page: {}".format("Alice In WONDERLAND", self.pages.numbers_of_pages))
+        print("Book name: {}, Total page: {}".format("book name", self.pages.numbers_of_pages)) #replace the first arg with a name of the book
         self.current_page = int(input("What page to start with? "))
         self.pages.display(self.current_page)
 
