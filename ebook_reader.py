@@ -1,3 +1,4 @@
+import sys
 ##
 ##The goal of this project is to make an e-book reader that imports a txt file of
 ##whatever book or anything.
@@ -6,44 +7,60 @@
 
 class Ebook_runner():
     def __init__(self):
-        self.current_book = Book()
+        input1 = input("Type in the name of the file> ")
+        self.current_book = Book(input1)
 
     def start(self):
         input("Ebook Reader, PRESS ENTER")
         self.current_book.open_page()
-        pass
+
 
 class Book():
-    def __init__(self):
-        self.book = open('', encoding='utf-8') #first arg. for a name of the ebook you are trying to import
+    def __init__(self, book):
+        self.book = open(book, encoding='utf-8')
         self.pages = Page(self.book)
         self.current_page = 0
 
     def open_page(self):
-        print("Book name: {}, Total page: {}".format("book name", self.pages.numbers_of_pages)) #replace the first arg with a name of the book
+        print("Book name: {}, Total page: {}".format("Alice In Wonderland", self.pages.numbers_of_pages))
         self.current_page = int(input("What page to start with? "))
         self.pages.display(self.current_page)
 
         while True:
-            temp1 = input("To the next page: N, To the previous page: P> ")
+            temp1 = input("To the next page: N, To the previous page: P > ")
 
             if temp1 == 'n':
-                self.current_page += 1
-                self.turn_next(self.current_page)
-                if self.current_page > self.pages.numbers_of_pages:
-                    print("End of the page!")
+                self.turn_next()
 
-            if temp1 == 'p':
-                self.current_page -= 1
-                self.turn_previous(self.current_page)
-                if self.current_page <= 0:
-                    print("This is the first page!")
+            elif temp1 == 'p':
+                self.turn_previous()
 
-    def turn_next(self, page):
-        self.pages.display(page)
+    def turn_next(self):
+        self.current_page += 1
 
-    def turn_previous(self, page):
-        self.pages.display(page)
+        if self.current_page > self.pages.numbers_of_pages:
+            print("End of the page!")
+            quit_it = input("Would you like to quit the program? Y or N")
+
+            if quit_it == 'y' or quit_it == 'Y':
+                sys.exit(1)
+
+            elif quit_it == 'N' or quit_it == 'n':
+                self.current_page = self.pages.numbers_of_pages #assign an int. value of page - the last page - to the variable
+                self.pages.display(self.current_page)
+        else:
+            self.pages.display(self.current_page)
+
+    def turn_previous(self):
+        self.current_page -= 1
+
+        if self.current_page <= 0:
+            print("This is the first page!")
+            self.current_page = 1
+            self.pages.display(self.current_page)
+
+        else:
+            self.pages.display(self.current_page)
 
 class Page():
     def __init__(self, book):
@@ -55,15 +72,15 @@ class Page():
         self.line_count = 0
         self.divide_into_pages()
 
-    def divide_into_pages(self): #divide the book into 40 lines per one page
+    def divide_into_pages(self): #divide the book into 40 lines per page
         temp_lines = self.book.readlines()
         per_page = 0 #referring to lines of each page of the book
 
-        self.numbers_of_lines = len(temp_lines) - 1
+        self.numbers_of_lines = len(temp_lines) - 1 
 
         while self.line_count != self.numbers_of_lines:
             per_page += 1
-            newly_formed = temp_lines[self.line_count].strip()
+            newly_formed = temp_lines[self.line_count].strip() 
             self.each_page.append(newly_formed)
             self.line_count += 1
 
@@ -75,11 +92,10 @@ class Page():
 
 
     def display(self, page_number):
+        print('\n')
         print(('-'*30), f"Page {page_number}", ('-'*30))
-
         for x in self.pages[page_number]:
             print(x)
-
         print(('-'*30), f"Page {page_number}", ('-'*30))
 
 
